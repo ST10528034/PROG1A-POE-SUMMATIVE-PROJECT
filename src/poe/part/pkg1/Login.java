@@ -104,4 +104,9 @@ public class Login {
         }
         return "Username or password incorrect, please try again.";
     }
+
+    // The registered cell number (used as the sender of stored messages)
+    public String getCellNumber() {
+        return cellNumber;
+    }
 }

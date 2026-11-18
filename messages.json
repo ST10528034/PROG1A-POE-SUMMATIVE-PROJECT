@@ -2,8 +2,25 @@
   {
     "messageID": "0012345678",
     "messageNumber": 0,
+    "sender": "Unknown",
     "recipient": "+27718693002",
     "message": "Hi Mike, can you join us for dinner tonight?",
     "messageHash": "00:0:HITONIGHT"
+  },
+  {
+    "messageID": "1842486613",
+    "messageNumber": 0,
+    "sender": "0817421062",
+    "recipient": "0732991350",
+    "message": "hey ma",
+    "messageHash": "18:0:HEYMA"
+  },
+  {
+    "messageID": "8940154174",
+    "messageNumber": 1,
+    "sender": "0817421062",
+    "recipient": "0817421062",
+    "message": "hey there",
+    "messageHash": "89:1:HEYTHERE"
   }
 ]
