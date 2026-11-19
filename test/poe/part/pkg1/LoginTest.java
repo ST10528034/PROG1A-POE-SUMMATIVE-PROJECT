@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * LoginTest.java - unit tests for registration and login (unchanged from Part 1)
  */
 package poe.part.pkg1;
 
