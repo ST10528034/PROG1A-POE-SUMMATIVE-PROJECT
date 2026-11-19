@@ -29,7 +29,7 @@ public final class Message {
 
     // Results that QuickChat compares against
     static final String RECIPIENT_OK = "Cell phone number successfully captured.";
-    static final String MESSAGE_OK = "Message sent";
+    static final String MESSAGE_OK = "Message Sent";
 
     // ---------------------------------------------------------------
     // Arrays (every list with the same prefix uses one index per message)
