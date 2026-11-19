@@ -1,6 +1,5 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Login.java - QuickChat registration and login (POE Part 1)
  */
 package poe.part.pkg1;
 
@@ -48,19 +47,19 @@ public class Login {
         return hasCapital && hasNumber && hasSpecial;
     }
 
-    // Local South African number: starts with 0 and has ten digits in total, e.g. 0817421062
+    // Local South African number: starts with 0 and has ten digits in total
     public boolean checkLocalNumber(String cellNumber) {
         return cellNumber != null
                 && cellNumber.matches("^0[0-9]{9}$");
     }
 
-    // International number: + and a 1-3 digit country code, then up to ten digits, e.g. +27817421062
+    // International number: + and a 1-3 digit country code, then up to ten digits
     public boolean checkInternationalNumber(String cellNumber) {
         return cellNumber != null
                 && cellNumber.matches("^\\+[0-9]{1,3}[0-9]{1,10}$");
     }
 
-    // Accepts either a local number (0817421062) or an international number (+27817421062)
+    // Accepts either a local number (0812345678) or an international number (+27823456789)
     public boolean checkCellPhoneNumber(String cellNumber) {
         return checkLocalNumber(cellNumber)
                 || checkInternationalNumber(cellNumber);
@@ -98,6 +97,7 @@ public class Login {
                 && password.equals(enteredPassword);
     }
 
+    // Message shown to the user after a login attempt
     public String returnLoginStatus(String enteredUsername, String enteredPassword) {
         if (loginUser(enteredUsername, enteredPassword)) {
             return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
@@ -105,7 +105,7 @@ public class Login {
         return "Username or password incorrect, please try again.";
     }
 
-    // The registered cell number (used as the sender of stored messages)
+    // The registered cell number (used as the sender of every message)
     public String getCellNumber() {
         return cellNumber;
     }
