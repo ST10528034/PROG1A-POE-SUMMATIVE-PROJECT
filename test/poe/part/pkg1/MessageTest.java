@@ -142,7 +142,7 @@ public class MessageTest {
 
     @Test
     public void testSendMessage() {
-        Message m = new Message("0012345678", NUMBER, TEXT, 0);
+        Message m = new Message("0019345678", NUMBER, TEXT, 0);
 
         assertEquals(
                 "Message successfully sent.",
