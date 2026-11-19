@@ -102,7 +102,7 @@ public class Login {
         if (loginUser(enteredUsername, enteredPassword)) {
             return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
         }
-        return "Username or password incorrect, please try again.";
+        return "Username or Password incorrect, please try again.";
     }
 
     // The registered cell number (used as the sender of every message)
