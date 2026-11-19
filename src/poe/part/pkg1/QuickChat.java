@@ -1,147 +1,93 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * QuickChat.java - QuickChat POE Part 3
+ * Main program: register, log in, send messages and work with stored messages.
+ * Every input and output uses JOptionPane dialogs.
  */
-
-
-
 package poe.part.pkg1;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
- * QuickChat: register, log in, then send messages from a numeric menu.
+ * QuickChat: register, log in, then use a numeric menu to send messages
+ * and to view the stored messages.
  */
 public class QuickChat {
 
-    private static final Scanner INPUT = new Scanner(System.in);
+    private static final String TITLE = "QuickChat";
+
+    private static final String MAIN_MENU = """
+            ===== Menu =====
+            1) Send Messages
+            2) Show recently sent messages
+            3) Quit
+            4) Stored Messages
+
+            Choose an option:""";
+
+    private static final String STORED_MENU = """
+            ===== Stored Messages =====
+            1) Display the sender and recipient of all stored messages
+            2) Display the longest stored message
+            3) Search for a message ID
+            4) Search for all messages stored for a recipient
+            5) Delete a message using the message hash
+            6) Display a report of all stored messages
+            0) Back to the main menu
+
+            Choose an option:""";
 
     public static void main(String[] args) {
         Login login = registerAndLogin();
-        Message.setSenderNumber(login.getCellNumber());
-        Message.loadStoredMessages();   // fills the stored arrays from messages.json
 
-        System.out.println("\n======================");
-        System.out.println("WELCOME TO QUICKCHAT!");
-        System.out.println("======================");
+        showMessage("WELCOME TO QUICKCHAT!");
+        Message.loadStoredMessages();
 
-        int totalAllowed = readInt("How many messages do you wish to enter? ", 1);
+        int totalAllowed = readInt("How many messages do you wish to enter?", 1);
         int entered = 0;   // number of messages handled so far (also the next message number)
         int option = 0;
 
         while (option != 3) {
-            System.out.println("\n===== Menu =====");
-            System.out.println("1) Send Messages");
-            System.out.println("2) Show recently sent messages");
-            System.out.println("3) Quit");
-            System.out.println("4) Stored Messages");
-            option = readInt("Choose an option: ", 0);
+            option = readInt(MAIN_MENU, 0);
 
             switch (option) {
-                case 1 -> entered = sendMessages(entered, totalAllowed);
-                case 2 -> System.out.println(Message.printMessages());
-                case 3 -> System.out.println("Goodbye. Total messages sent: "
-                            + Message.returnTotalMessages());
+                case 1 -> entered = sendMessages(entered, totalAllowed, login);
+                case 2 -> showSentMessages();
+                case 3 -> showMessage("Goodbye. Total messages sent: " + Message.returnTotalMessages());
                 case 4 -> storedMessagesMenu();
-                default -> System.out.println("Invalid option. Please choose 1, 2, 3 or 4.");
+                default -> showMessage("Invalid option. Please choose 1, 2, 3 or 4.");
             }
         }
-    }
-
-    // ---------------------------------------------------------------
-    // Stored Messages menu: works with the arrays in the Message class
-    // ---------------------------------------------------------------
-    private static void storedMessagesMenu() {
-        int choice = -1;
-        while (choice != 0) {
-            System.out.println("\n===== Stored Messages =====");
-            System.out.println("1) Display sender and recipient of all stored messages");
-            System.out.println("2) Display the longest stored message");
-            System.out.println("3) Search for a message ID");
-            System.out.println("4) Search for messages stored for a recipient");
-            System.out.println("5) Delete a message using its hash");
-            System.out.println("6) Display a report of all stored messages");
-            System.out.println("0) Back to main menu");
-            choice = readInt("Choose an option: ", 0);
-
-            switch (choice) {
-                case 1 -> System.out.println(Message.displaySendersAndRecipients());
-                case 2 -> System.out.println("Longest stored message: " + Message.getLongestStoredMessage());
-                case 3 -> searchById();
-                case 4 -> searchByRecipient();
-                case 5 -> deleteByHash();
-                case 6 -> System.out.println(Message.displayStoredReport());
-                case 0 -> System.out.println("Returning to main menu.");
-                default -> System.out.println("Invalid option. Please choose 0 to 6.");
-            }
-        }
-    }
-
-    private static void searchById() {
-        System.out.print("Enter the message ID: ");
-        String[] found = Message.searchByMessageId(INPUT.nextLine().trim());
-        if (found == null) {
-            System.out.println("No message found with that ID.");
-        } else {
-            System.out.println("Recipient: " + found[0]);
-            System.out.println("Message: " + found[1]);
-        }
-    }
-
-    private static void searchByRecipient() {
-        System.out.print("Enter the recipient cell number: ");
-        ArrayList<String> found = Message.searchByRecipient(INPUT.nextLine().trim());
-        if (found.isEmpty()) {
-            System.out.println("No messages found for that recipient.");
-        }
-        for (String text : found) {
-            System.out.println("Message: " + text);
-        }
-    }
-
-    private static void deleteByHash() {
-        System.out.print("Enter the message hash: ");
-        System.out.println(Message.deleteByHash(INPUT.nextLine().trim()));
     }
 
     // ---------------------------------------------------------------
     // Registration and login
     // ---------------------------------------------------------------
     private static Login registerAndLogin() {
-        System.out.println("=== Register ===");
-        System.out.print("Enter your first name: ");
-        String firstName = INPUT.nextLine().trim();
-        System.out.print("Enter your last name: ");
-        String lastName = INPUT.nextLine().trim();
+        String firstName = askOrQuit("Enter your first name:").trim();
+        String lastName = askOrQuit("Enter your last name:").trim();
 
         Login login = new Login(firstName, lastName);
         boolean registered = false;
-        String username = "";
-        String password = "";
 
         while (!registered) {
-            System.out.print("Enter username (underscore, max 5 characters): ");
-            username = INPUT.nextLine().trim();
-            System.out.print("Enter password (8+ chars, capital, number, special): ");
-            password = INPUT.nextLine();
-            System.out.print("Enter cell number (e.g. +27718693002 / 0712345678): ");
-            String cell = INPUT.nextLine().trim();
+            String username = askOrQuit("Enter username (underscore, max 5 characters):").trim();
+            String password = askOrQuit("Enter password (8+ chars, capital, number, special):");
+            String cell = askOrQuit("Enter cell number (e.g. +27718693002 / 0712345678):").trim();
 
             String result = login.registerUser(username, password, cell);
-            System.out.println(result);
+            showMessage(result);
             registered = result.endsWith("registered successfully.");
         }
 
-        System.out.println("\n=== Login ===");
         boolean loggedIn = false;
         while (!loggedIn) {
-            System.out.print("Enter username: ");
-            String enteredUser = INPUT.nextLine().trim();
-            System.out.print("Enter password: ");
-            String enteredPass = INPUT.nextLine();
+            String enteredUser = askOrQuit("Login - enter username:").trim();
+            String enteredPass = askOrQuit("Login - enter password:");
 
-            System.out.println(login.returnLoginStatus(enteredUser, enteredPass));
+            showMessage(login.returnLoginStatus(enteredUser, enteredPass));
             loggedIn = login.loginUser(enteredUser, enteredPass);
         }
         return login;
@@ -150,96 +96,211 @@ public class QuickChat {
     // ---------------------------------------------------------------
     // Sending messages: runs until the user's chosen number is reached
     // ---------------------------------------------------------------
-    private static int sendMessages(int entered, int totalAllowed) {
+    private static int sendMessages(int entered, int totalAllowed, Login login) {
         if (entered >= totalAllowed) {
-            System.out.println("You have already entered all " + totalAllowed + " messages.");
+            showMessage("You have already entered all " + totalAllowed + " messages.");
             return entered;
         }
 
         // The loop counter i is the message number (starts at 0)
         for (int i = entered; i < totalAllowed; i++) {
-            System.out.println("\n==============================");
-            System.out.println("MESSAGE " + (i + 1) + " of " + totalAllowed);
-            System.out.println("==============================");
-
-            String recipient = askRecipient();
+            String recipient = askRecipient(i + 1, totalAllowed);
             String text = askMessageText();
 
             Message message = new Message(recipient, text, i);
-            System.out.println("Message ID generated: " + message.getMessageID());
-            System.out.println("Message Hash: " + message.getMessageHash());
+            message.setSender(login.getCellNumber());
+            showMessage("Message ID generated: " + message.getMessageID()
+                    + "\nMessage Hash: " + message.getMessageHash());
 
-            System.out.println("\nWhat would you like to do with this message?");
-            System.out.println("1) Send Message");
-            System.out.println("2) Disregard Message");
-            System.out.println("3) Store Message to send later");
-            int choice = readInt("Enter your choice: ", 1);
-            while (choice < 1 || choice > 3) {
-                System.out.println("Invalid option.");
-                choice = readInt("Enter your choice: ", 1);
-            }
+            int choice = askSendChoice();
+            String result = message.sentMessage(choice);
 
-            System.out.println(message.SentMessage(choice));
-
-            if (choice == 1) {
-                System.out.println("\n" + Message.printMessages());
-            } else if (choice == 2) {
-                int deleteChoice = readInt("", 0);
-                if (deleteChoice == 0) {
-                    System.out.println("Message deleted.");
+            switch (choice) {
+                case 1 -> showReport(result + "\n\n" + Message.getSentReport());
+                case 2 -> {
+                    // The result is the prompt "Press 0 to delete the message."
+                    if (readInt(result, 0) == 0) {
+                        showMessage("Message deleted.");
+                    }
                 }
+                default -> showMessage(result);
             }
             entered = i + 1;
         }
 
-        System.out.println("Total messages sent: " + Message.returnTotalMessages());
+        showMessage("Total messages sent: " + Message.returnTotalMessages());
         return entered;
     }
 
-    private static String askRecipient() {
+    private static String askRecipient(int number, int total) {
         while (true) {
-            System.out.print("Enter recipient cell number (e.g. +27718693002): ");
-            String recipient = INPUT.nextLine().trim();
+            String recipient = askOrQuit("MESSAGE " + number + " of " + total
+                    + "\nEnter recipient cell number (e.g. +27718693002):").trim();
             String result = Message.checkRecipientCell(recipient);
-            System.out.println(result);
-            if (result.equals("Cell phone number successfully captured.")) {
+            if (result.equals(Message.RECIPIENT_OK)) {
+                showMessage(result);
                 return recipient;
             }
+            showMessage(result);
         }
     }
 
     private static String askMessageText() {
         while (true) {
-            System.out.print("Enter your message: ");
-            String text = INPUT.nextLine();
+            String text = askOrQuit("Enter your message:");
             if (text.trim().isEmpty()) {
-                System.out.println("Message cannot be empty.");
+                showMessage("Message cannot be empty.");
                 continue;
             }
             String result = Message.checkMessageLength(text);
-            System.out.println(result);
-            if (result.equals("Message sent")) {
+            if (result.equals(Message.MESSAGE_OK)) {
+                showMessage(result);
                 return text;
+            }
+            showMessage(result);
+        }
+    }
+
+    private static int askSendChoice() {
+        int choice = readInt("What would you like to do with this message?\n"
+                + "1) Send Message\n2) Disregard Message\n3) Store Message to send later\n\n"
+                + "Enter your choice:", 1);
+        while (choice > 3) {
+            showMessage("Invalid option.");
+            choice = readInt("Enter your choice (1, 2 or 3):", 1);
+        }
+        return choice;
+    }
+
+    // ---------------------------------------------------------------
+    // Show recently sent messages (main menu option 2)
+    // ---------------------------------------------------------------
+    private static void showSentMessages() {
+        String report = Message.getSentReport();
+        if (report.isEmpty()) {
+            showMessage("No messages have been sent yet.");
+        } else {
+            showReport(report);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // Stored Messages (main menu option 4)
+    // ---------------------------------------------------------------
+    private static void storedMessagesMenu() {
+        Message.loadStoredMessages();   // read the JSON file into the Stored Messages arrays
+
+        while (true) {
+            String choice = ask(STORED_MENU);
+            if (choice == null) {
+                return;   // dialog closed: back to the main menu
+            }
+            switch (choice.trim()) {
+                case "1" -> showStoredOrEmpty(Message.getSendersAndRecipients());
+                case "2" -> showLongestMessage();
+                case "3" -> searchByMessageId();
+                case "4" -> searchByRecipient();
+                case "5" -> deleteByHash();
+                case "6" -> showStoredOrEmpty(Message.getStoredReport());
+                case "0" -> {
+                    return;
+                }
+                default -> showMessage("Invalid option. Please choose 0 to 6.");
             }
         }
     }
 
-    // Reads a whole number without crashing on letters (minimum is only used for the prompt loop)
+    // Shows stored-message text, or a notice when nothing is stored
+    private static void showStoredOrEmpty(String text) {
+        if (text.isEmpty()) {
+            showMessage("There are no stored messages.");
+        } else {
+            showReport(text);
+        }
+    }
+
+    private static void showLongestMessage() {
+        String longest = Message.getLongestStoredMessage();
+        showMessage(longest.isEmpty() ? "There are no stored messages."
+                : "Longest stored message:\n" + longest);
+    }
+
+    private static void searchByMessageId() {
+        String id = ask("Enter the message ID to search for:");
+        if (id == null) {
+            return;
+        }
+        String[] found = Message.searchByMessageID(id.trim());
+        showMessage(found == null ? "No message found with that ID."
+                : "Recipient: " + found[0] + "\nMessage: " + found[1]);
+    }
+
+    private static void searchByRecipient() {
+        String recipient = ask("Enter the recipient cell number to search for:");
+        if (recipient == null) {
+            return;
+        }
+        List<String> found = Message.searchByRecipient(recipient.trim());
+        if (found.isEmpty()) {
+            showMessage("No messages found for that recipient.");
+            return;
+        }
+        StringBuilder result = new StringBuilder("Messages for " + recipient.trim() + ":\n");
+        for (int i = 0; i < found.size(); i++) {
+            result.append("\n").append(i + 1).append(") ").append(found.get(i));
+        }
+        showReport(result.toString());
+    }
+
+    private static void deleteByHash() {
+        String hash = ask("Enter the message hash of the message to delete:");
+        if (hash != null) {
+            showMessage(Message.deleteByHash(hash.trim()));
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // JOptionPane helpers
+    // ---------------------------------------------------------------
+
+    // Asks a question; returns null if the user presses Cancel or closes the dialog
+    private static String ask(String prompt) {
+        return JOptionPane.showInputDialog(null, prompt, TITLE, JOptionPane.QUESTION_MESSAGE);
+    }
+
+    // Asks a question and ends the program if the user presses Cancel or closes the dialog
+    private static String askOrQuit(String prompt) {
+        String answer = ask(prompt);
+        if (answer == null) {
+            System.exit(0);
+        }
+        return answer;
+    }
+
+    // Reads a whole number without crashing on letters
     private static int readInt(String prompt, int minimum) {
         while (true) {
-            if (!prompt.isEmpty()) {
-                System.out.print(prompt);
-            }
-            String line = INPUT.nextLine().trim();
+            String answer = askOrQuit(prompt);
             try {
-                int value = Integer.parseInt(line);
+                int value = Integer.parseInt(answer.trim());
                 if (value >= minimum) {
                     return value;
                 }
-                System.out.println("Please enter a number of " + minimum + " or more.");
+                showMessage("Please enter a number of " + minimum + " or more.");
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a whole number.");
+                showMessage("Please enter a whole number.");
             }
         }
+    }
+
+    private static void showMessage(String text) {
+        JOptionPane.showMessageDialog(null, text, TITLE, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // Long text (reports) goes in a scrolling box so it fits on the screen
+    private static void showReport(String text) {
+        JTextArea area = new JTextArea(text, 15, 45);
+        area.setEditable(false);
+        JOptionPane.showMessageDialog(null, new JScrollPane(area), TITLE, JOptionPane.INFORMATION_MESSAGE);
     }
 }
