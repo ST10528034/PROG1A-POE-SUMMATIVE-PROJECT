@@ -17,7 +17,7 @@ import org.junit.rules.TemporaryFolder;
 
 public class StoredMessagesTest {
 
-    // Test data from the question paper
+    // Test data from poe
     private static final String RECIPIENT_1 = "+27834557896";
     private static final String MESSAGE_1 = "Did you get the cake?";
 
@@ -27,7 +27,7 @@ public class StoredMessagesTest {
     private static final String RECIPIENT_3 = "+27834484567";
     private static final String MESSAGE_3 = "Yohoooo, I am at your gate.";
 
-    private static final String DEVELOPER_4 = "0838884567";   // also used as message 4's ID
+    private static final String DEVELOPER_4 = "0838884567";   
     private static final String MESSAGE_4 = "It is dinner time!";
 
     private static final String RECIPIENT_5 = "+27838884567";

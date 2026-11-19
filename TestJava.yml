@@ -29,5 +29,6 @@ jobs:
       - name: Compile source and test code
         run: javac -cp "lib/*" -d out $(find src test -name "*.java")
 
+      # Runs every test class: Login (Part 1), Message (Part 2) and Stored Messages (Part 3)
       - name: Run the unit tests
-        run: java -cp "out:lib/*" org.junit.runner.JUnitCore poe.part.pkg1.MessageTest poe.part.pkg1.LoginTest
+        run: java -cp "out:lib/*" org.junit.runner.JUnitCore poe.part.pkg1.LoginTest poe.part.pkg1.MessageTest poe.part.pkg1.StoredMessagesTest
