@@ -29,13 +29,13 @@ public class QuickChat {
 
     private static final String STORED_MENU = """
             ===== Stored Messages =====
-            1) Display the sender and recipient of all stored messages
-            2) Display the longest stored message
-            3) Search for a message ID
-            4) Search for all messages stored for a recipient
-            5) Delete a message using the message hash
-            6) Display a report of all stored messages
-            0) Back to the main menu
+            1) Display the sender and recipient of all stored messages.
+            2) Display the longest stored message.
+            3) Search for a message ID.
+            4) Search for all messages stored for a recipient.
+            5) Delete a message using the message hash.
+            6) Display a report of all stored messages.
+            0) Back to the main menu.
 
             Choose an option:""";
 
