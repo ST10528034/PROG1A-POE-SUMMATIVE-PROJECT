@@ -1,5 +1,5 @@
 FORTUNATE KUTLWANO MALOPE - ST10528034
-# QuickChat - PROG5121 POE ParT 3 SUMMATIVE PROJECT
+# QuickChat - PROG5121 POE Part 3 SUMMATIVE PROJECT
 
 A Java messaging app. Users register and log in, then send, disregard or store messages.
 All input and output uses `JOptionPane` dialogs.
