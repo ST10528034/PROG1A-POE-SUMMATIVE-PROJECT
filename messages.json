@@ -22,5 +22,37 @@
     "recipient": "0817421062",
     "message": "hey there",
     "messageHash": "89:1:HEYTHERE"
+  },
+  {
+    "messageID": "6954915422",
+    "messageNumber": 0,
+    "sender": "0817421062",
+    "recipient": "0732991350",
+    "message": "hey there",
+    "messageHash": "69:0:HEYTHERE"
+  },
+  {
+    "messageID": "1165834572",
+    "messageNumber": 1,
+    "sender": "0817421062",
+    "recipient": "0817421062",
+    "message": "hiiiii",
+    "messageHash": "11:1:HIIIIIHIIIII"
+  },
+  {
+    "messageID": "7492412554",
+    "messageNumber": 1,
+    "sender": "+27838968976",
+    "recipient": "+27838884567",
+    "message": "Where are your? You are late! I have asked you to be on time.",
+    "messageHash": "74:1:WHERETIME"
+  },
+  {
+    "messageID": "8676720337",
+    "messageNumber": 4,
+    "sender": "+27838968976",
+    "recipient": "+27838884567",
+    "message": "Ok, I am leaving without you",
+    "messageHash": "86:4:OKYOU"
   }
 ]

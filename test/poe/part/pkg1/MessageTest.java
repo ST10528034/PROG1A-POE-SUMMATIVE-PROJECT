@@ -54,9 +54,9 @@ public class MessageTest {
 
     @Test
     public void testRecipientLocalNumberAccepted() {
-        Message m = new Message("0012345678", "0817421062", TEXT, 0);
+        Message m = new Message("0012345678", "0718693002", TEXT, 0);
 
-        assertTrue(Message.checkLocalRecipient("0817421062"));
+        assertTrue(Message.checkLocalRecipient("0718693002"));
         assertEquals(
                 "Cell phone number successfully captured.",
                 m.checkRecipientCell()
@@ -65,9 +65,9 @@ public class MessageTest {
 
     @Test
     public void testRecipientInternationalNumberAccepted() {
-        assertTrue(Message.checkInternationalRecipient("+27817421062"));
-        assertFalse(Message.checkInternationalRecipient("0817421062"));
-        assertFalse(Message.checkLocalRecipient("+27817421062"));
+        assertTrue(Message.checkInternationalRecipient("+27812345678"));
+        assertFalse(Message.checkInternationalRecipient("0812345678"));
+        assertFalse(Message.checkLocalRecipient("+27812345678"));
     }
 
     @Test

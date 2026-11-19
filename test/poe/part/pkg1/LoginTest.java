@@ -44,8 +44,8 @@ public class LoginTest {
 
     @Test
     public void localNumberWithoutInternationalCodeAccepted() {
-        assertTrue(login.checkLocalNumber("0817421062"));
-        assertTrue(login.checkCellPhoneNumber("0817421062"));
+        assertTrue(login.checkLocalNumber("0812345678"));
+        assertTrue(login.checkCellPhoneNumber("0812345678"));
     }
 
     @Test
@@ -57,8 +57,8 @@ public class LoginTest {
 
     @Test
     public void internationalNumberAccepted() {
-        assertTrue(login.checkInternationalNumber("+27817421062"));
-        assertTrue(login.checkCellPhoneNumber("+27817421062"));
+        assertTrue(login.checkInternationalNumber("+27812345678"));
+        assertTrue(login.checkCellPhoneNumber("+27812345678"));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class LoginTest {
 
     @Test
     public void registerAcceptsLocalNumber() {
-        assertTrue(login.registerUser("Kut_1", "Kutlw@n07#", "0817421062")
+        assertTrue(login.registerUser("kyl_1", "Ch&&sec@ke99!", "+27838968976")
                 .endsWith("registered successfully."));
     }
 

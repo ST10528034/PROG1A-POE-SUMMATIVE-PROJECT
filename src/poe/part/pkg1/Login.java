@@ -100,7 +100,7 @@ public class Login {
     // Message shown to the user after a login attempt
     public String returnLoginStatus(String enteredUsername, String enteredPassword) {
         if (loginUser(enteredUsername, enteredPassword)) {
-            return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
+            return "Welcome " + firstName + " " + lastName + ", " + " it is great to see you again.";
         }
         return "Username or password incorrect, please try again.";
     }
