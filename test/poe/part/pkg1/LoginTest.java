@@ -51,9 +51,9 @@ public class LoginTest {
 
     @Test
     public void localNumberWrongLengthRejected() {
-        assertFalse(login.checkLocalNumber("081742106"));
-        assertFalse(login.checkLocalNumber("08174210622"));
-        assertFalse(login.checkCellPhoneNumber("08174A1062"));
+        assertFalse(login.checkLocalNumber("081749106"));
+        assertFalse(login.checkLocalNumber("08174219622"));
+        assertFalse(login.checkCellPhoneNumber("08174A1962"));
     }
 
     @Test
