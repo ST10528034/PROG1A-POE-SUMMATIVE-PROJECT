@@ -1,8 +1,9 @@
 /*
- * LoginTest.java - unit tests for registration and login (unchanged from Part 1)
+ * LoginTest.java - unit tests for registration and login (Part 1)
  */
 package poe.part.pkg1;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -68,8 +69,14 @@ public class LoginTest {
     }
 
     @Test
-    public void registerAcceptsLocalNumber() {
+    public void registerAcceptsInternationalNumber() {
         assertTrue(login.registerUser("kyl_1", "Ch&&sec@ke99!", "+27838968976")
+                .endsWith("registered successfully."));
+    }
+
+    @Test
+    public void registerAcceptsLocalNumber() {
+        assertTrue(login.registerUser("kyl_1", "Ch&&sec@ke99!", "0838968976")
                 .endsWith("registered successfully."));
     }
 
@@ -83,5 +90,12 @@ public class LoginTest {
     public void loginFailed() {
         login.registerUser("kyl_1", "Ch&&sec@ke99!", "+27838968976");
         assertFalse(login.loginUser("kyl_1", "wrong"));
+    }
+
+    @Test
+    public void welcomeMessageShownAfterSuccessfulLogin() {
+        login.registerUser("kyl_1", "Ch&&sec@ke99!", "+27838968976");
+        assertEquals("Welcome Kyle, Smith it is great to see you again.",
+                login.returnLoginStatus("kyl_1", "Ch&&sec@ke99!"));
     }
 }

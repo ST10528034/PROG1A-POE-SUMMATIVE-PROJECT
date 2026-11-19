@@ -220,9 +220,9 @@ public class QuickChat {
     }
 
     private static void showLongestMessage() {
-        String longest = Message.getLongestStoredMessage();
-        showMessage(longest.isEmpty() ? "There are no stored messages."
-                : "Longest stored message:\n" + longest);
+        String details = Message.getLongestStoredDetails();
+        showMessage(details.isEmpty() ? "There are no stored messages."
+                : "Longest stored message:\n\n" + details);
     }
 
     private static void searchByMessageId() {

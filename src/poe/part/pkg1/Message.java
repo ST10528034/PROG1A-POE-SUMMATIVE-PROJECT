@@ -38,14 +38,14 @@ public final class Message {
     // Message ID and Message Hash arrays: every message handled (sent, disregarded or stored)
     private static final ArrayList<String> allMessageIds = new ArrayList<>();
     private static final ArrayList<String> allMessageHashes = new ArrayList<>();
-    
-// Sent Message array (parallel arrays)
+
+    // Sent Message array (parallel arrays)
     private static final ArrayList<String> sentIds = new ArrayList<>();
     private static final ArrayList<String> sentHashes = new ArrayList<>();
     private static final ArrayList<String> sentRecipients = new ArrayList<>();
     private static final ArrayList<String> sentMessages = new ArrayList<>();
-    
-// Disregarded Messages array
+
+    // Disregarded Messages array
     private static final ArrayList<String> disregardedMessages = new ArrayList<>();
 
     // Stored Messages array (parallel arrays, filled from the JSON file)
@@ -83,8 +83,8 @@ public final class Message {
     private final String text;
     private final String hash;
     private String sender = "Unknown";
-    
-// Creates a message with an auto-generated ten-digit ID and hash
+
+    // Creates a message with an auto-generated ten-digit ID and hash
     public Message(String recipient, String text, int messageNumber) {
         this(generateMessageID(), recipient, text, messageNumber);
     }
@@ -278,9 +278,19 @@ public final class Message {
                 storedRecipients.add(fields.getOrDefault("recipient", ""));
                 storedMessages.add(fields.getOrDefault("message", ""));
                 storedNumbers.add(Integer.parseInt(fields.getOrDefault("messageNumber", "0")));
+                addToAllArraysIfMissing(storedIds.get(storedIds.size() - 1),
+                        storedHashes.get(storedHashes.size() - 1));
             }
         } catch (IOException e) {
             System.err.println("Could not read " + storageFile + ": " + e.getMessage());
+        }
+    }
+
+    // Keeps the Message ID and Message Hash arrays complete for messages stored in an earlier run
+    private static void addToAllArraysIfMissing(String id, String messageHash) {
+        if (!allMessageIds.contains(id)) {
+            allMessageIds.add(id);
+            allMessageHashes.add(messageHash);
         }
     }
 
@@ -349,15 +359,28 @@ public final class Message {
         return result.toString();
     }
 
-    // 2b: the longest stored message (empty text if nothing is stored)
-    public static String getLongestStoredMessage() {
-        String longest = "";
-        for (String storedText : storedMessages) {
-            if (storedText.length() > longest.length()) {
-                longest = storedText;
+    // 2b: position of the longest stored message (-1 if nothing is stored)
+    private static int indexOfLongestStored() {
+        int longestIndex = -1;
+        for (int i = 0; i < storedMessages.size(); i++) {
+            if (longestIndex < 0 || storedMessages.get(i).length() > storedMessages.get(longestIndex).length()) {
+                longestIndex = i;
             }
         }
-        return longest;
+        return longestIndex;
+    }
+
+    // 2b: the longest stored message (empty text if nothing is stored)
+    public static String getLongestStoredMessage() {
+        int index = indexOfLongestStored();
+        return index < 0 ? "" : storedMessages.get(index);
+    }
+
+    // 2b: full details of the longest stored message (empty text if nothing is stored)
+    public static String getLongestStoredDetails() {
+        int index = indexOfLongestStored();
+        return index < 0 ? "" : formatEntry(index + 1, storedIds.get(index), storedHashes.get(index),
+                storedSenders.get(index), storedRecipients.get(index), storedMessages.get(index));
     }
 
     // 2c: searches sent then stored messages; returns {recipient, message} or null if not found

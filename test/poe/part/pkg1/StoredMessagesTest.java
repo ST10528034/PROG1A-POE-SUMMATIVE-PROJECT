@@ -27,7 +27,7 @@ public class StoredMessagesTest {
     private static final String RECIPIENT_3 = "+27834484567";
     private static final String MESSAGE_3 = "Yohoooo, I am at your gate.";
 
-    private static final String DEVELOPER_4 = "0838884567";   
+    private static final String DEVELOPER_4 = "0838884567";
     private static final String MESSAGE_4 = "It is dinner time!";
 
     private static final String RECIPIENT_5 = "+27838884567";
@@ -196,5 +196,20 @@ public class StoredMessagesTest {
         assertTrue(result.contains("Sender: Unknown"));
         assertTrue(result.contains("Recipient: " + RECIPIENT_2));
         assertTrue(result.contains("Recipient: " + RECIPIENT_5));
+    }
+
+    @Test
+    public void displayLongestMessageDetails() {
+        String details = Message.getLongestStoredDetails();
+        assertTrue(details.contains(MESSAGE_2));
+        assertTrue(details.contains(RECIPIENT_2));
+        assertTrue(details.contains(message2.getMessageHash()));
+    }
+
+    @Test
+    public void idAndHashArraysIncludeMessagesStoredInEarlierRun() {
+        Message.resetAll();                 // simulates restarting the program
+        Message.loadStoredMessages();       // the JSON file still holds messages 2 and 5
+        assertEquals(Arrays.asList("0000000002", "0000000005"), Message.getMessageIds());
     }
 }
